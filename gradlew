@@ -1,2 +1,2 @@
 #!/bin/sh
-echo gradlew placeholder
+echo 'Use Android Studio to generate real gradle wrapper'

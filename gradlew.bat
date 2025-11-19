@@ -1,1 +1,1 @@
-echo gradlew placeholder
+echo Use Android Studio wrapper
