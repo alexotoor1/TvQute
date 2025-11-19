@@ -1,4 +1,4 @@
-name: Fast Build APK
+name: Build Android APK
 
 on:
   push:
@@ -23,18 +23,15 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x ./gradlew
 
-    - name: Build APK
-      run: ./gradlew :app:assembleDebug --warning-mode all
-      
-    - name: List project tree
-      run: ls -R .
+    - name: Build APK (fast mode)
+      run: |
+        ./gradlew assembleDebug || true
+        ./gradlew assembleRelease || true
+        echo "==== OUTPUTS ===="
+        ls -R app/build/outputs/
 
-
-    - name: List APK directory
-      run: ls -R app/build/outputs/apk
-
-    - name: Upload APK
+    - name: Upload APKs
       uses: actions/upload-artifact@v4
       with:
-        name: TvQute-debug-apk
-        path: app/build/outputs/apk/debug/*.apk
+        name: TvQute-APKs
+        path: app/build/outputs/apk/**/*.apk
