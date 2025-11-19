@@ -22,6 +22,11 @@ jobs:
     - name: Install Gradle
       uses: gradle/gradle-build-action@v3
 
+    - name: Create gradle.properties
+      run: |
+        echo "android.useAndroidX=true" >> gradle.properties
+        echo "android.enableJetifier=true" >> gradle.properties
+
     - name: Regenerate Gradle Wrapper
       run: gradle wrapper
 
@@ -31,7 +36,7 @@ jobs:
     - name: Build Debug APK
       run: ./gradlew assembleDebug --stacktrace
 
-    - name: Check build output
+    - name: Show build outputs
       run: ls -R app/build/outputs/
 
     - name: Upload APK
