@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
     - name: Checkout
       uses: actions/checkout@v4
 
@@ -19,20 +20,39 @@ jobs:
         java-version: 17
         distribution: temurin
 
-    - name: Use Gradle Cache
+    - name: Gradle Cache
       uses: gradle/gradle-build-action@v3
 
     - name: Make gradlew executable
       run: chmod +x ./gradlew
 
-    - name: Build Debug APK (Fast)
-      run: ./gradlew assembleDebug --build-cache --parallel --configure-on-demand
+    - name: Fast Build Debug APK
+      run: ./gradlew :app:assembleDebug --parallel --configure-on-demand --stacktrace
 
-    - name: Show outputs
-      run: ls -R app/build/outputs/
+    # ــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ
+    # مرحله ۱: چک مسیر استاندارد
+    # ــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ
+    - name: Show outputs (standard paths)
+      run: |
+        echo "== Standard APK Paths =="
+        ls -R app/build/outputs || echo "Standard outputs not found"
 
-    - name: Upload APK
+    # ــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ
+    # مرحله ۲: جستجوی هوشمند تمامی APK ها (از هر مسیر)
+    # ــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ
+    - name: Find all APK files recursively
+      run: |
+        echo "== Searching for APK files =="
+        find . -type f -name "*.apk" -print | tee apk_paths.txt
+        echo "== END OF LIST =="
+
+    # ــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ
+    # مرحله ۳: آپلود همه APK هایی که پیدا شد
+    # ــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ
+    - name: Upload ALL APKs
       uses: actions/upload-artifact@v4
       with:
-        name: TvQute-fast-debug-apk
-        path: app/build/outputs/apk/debug/*.apk
+        name: All-Found-APKs
+        path: |
+          app/build/outputs/**/*.apk
+          **/*.apk
