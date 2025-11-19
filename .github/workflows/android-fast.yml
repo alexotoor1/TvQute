@@ -17,9 +17,7 @@ jobs:
         java-version: 17
         distribution: temurin
 
-    - name: List Gradle Tasks
-      run: ./gradlew tasks --all
-
+    
     - name: Make gradlew executable
       run: chmod +x ./gradlew
 
