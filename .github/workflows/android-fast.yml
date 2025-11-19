@@ -19,28 +19,20 @@ jobs:
         java-version: 17
         distribution: temurin
 
-    - name: Install Gradle
+    - name: Use Gradle Cache
       uses: gradle/gradle-build-action@v3
-
-    - name: Create gradle.properties
-      run: |
-        echo "android.useAndroidX=true" >> gradle.properties
-        echo "android.enableJetifier=true" >> gradle.properties
-
-    - name: Regenerate Gradle Wrapper
-      run: gradle wrapper
 
     - name: Make gradlew executable
       run: chmod +x ./gradlew
 
-    - name: Build Debug APK
-      run: ./gradlew assembleDebug --stacktrace
+    - name: Build Debug APK (Fast)
+      run: ./gradlew assembleDebug --build-cache --parallel --configure-on-demand
 
-    - name: Show build outputs
+    - name: Show outputs
       run: ls -R app/build/outputs/
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: TvQute-debug-apk
+        name: TvQute-fast-debug-apk
         path: app/build/outputs/apk/debug/*.apk
