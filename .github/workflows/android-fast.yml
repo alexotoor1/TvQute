@@ -28,10 +28,10 @@ jobs:
         ./gradlew assembleDebug || true
         ./gradlew assembleRelease || true
         echo "==== OUTPUTS ===="
-        ls -R app/build/outputs/
+        ls -R app/build/
 
-    - name: Upload APKs
+    - name: Upload ALL APKs
       uses: actions/upload-artifact@v4
       with:
         name: TvQute-APKs
-        path: app/build/outputs/apk/**/*.apk
+        path: app/build/**/*.apk
