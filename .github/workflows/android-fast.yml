@@ -25,6 +25,10 @@ jobs:
 
     - name: Build APK
       run: ./gradlew :app:assembleDebug --warning-mode all
+      
+    - name: List project tree
+      run: ls -R .
+
 
     - name: List APK directory
       run: ls -R app/build/outputs/apk
