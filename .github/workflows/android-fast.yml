@@ -1,4 +1,4 @@
-name: FastBuild-APK
+name: Build Android APK
 
 on:
   push:
@@ -11,28 +11,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1) دریافت سورس
     - name: Checkout
       uses: actions/checkout@v4
 
-    # 2) نصب JDK مناسب اندروید
     - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
         java-version: '17'
         distribution: 'temurin'
 
-    # 3) فعال کردن gradlew
     - name: Make gradlew executable
       run: chmod +x ./gradlew
 
-    # 4) ساخت سریع APK
     - name: Build Debug APK
-      run: ./gradlew --no-daemon --stacktrace assembleDebug
+      run: ./gradlew assembleDebug
 
-    # 5) آپلود خروجی
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: TvQute-APK
+        name: TvQute-debug-apk
         path: app/build/outputs/apk/debug/*.apk
